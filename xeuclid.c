@@ -14,7 +14,7 @@ BIGNUM *XEuclid(BIGNUM *x, BIGNUM *y, const BIGNUM *a, const BIGNUM *b)
 	BIGNUM *ty= BN_new();
 	BIGNUM *ta = BN_new();
 	BIGNUM *tb = BN_new();
-	
+	int chang =0;	
 	BN_copy(tx,x);		
 	BN_copy(ty,y);		
 	BN_copy(ta,a);		
@@ -47,6 +47,7 @@ BIGNUM *XEuclid(BIGNUM *x, BIGNUM *y, const BIGNUM *a, const BIGNUM *b)
 		t = ta;
 		ta = tb;
 		tb = t;
+		chang =1;
 	}
 	while(!BN_is_zero(tb)){//get q
 		if(!BN_mod(r,ta,tb,ctx)){
@@ -86,9 +87,17 @@ BIGNUM *XEuclid(BIGNUM *x, BIGNUM *y, const BIGNUM *a, const BIGNUM *b)
 		BN_copy(tb,r);
 	}
 	//r ==0 
-	BN_copy(x,temp_x1);
-	BN_copy(y,temp_y1);
+	if( chang ==1)
+	{
+	BN_copy(y,temp_x1);
+	BN_copy(x,temp_y1);
 	BN_copy(r,ta);
+	}else
+	{
+		BN_copy(x,temp_x1);
+		BN_copy(y,temp_y1);
+		BN_copy(r,ta);
+	}
 	if(ebit == 1)
 	{
 		return NULL;
